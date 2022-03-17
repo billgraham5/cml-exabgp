@@ -41,7 +41,7 @@ https://github.com/dfex/route-smash
 6.  Create your own or download an exabgp.conf configuration file.
  
  	```
- 	git clone https://github/jnprbill/cml-exabgp/exabgp.conf
+ 	git clone https://github/w4rfc/cml-exabgp/exabgp.conf
  	```
  	Note:  Carefully coordinate the next-hop defined in smash-route.py and the IP addressing used in exabgp.conf so that routes not hidden by downstream devices under test.
  
