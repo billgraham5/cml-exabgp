@@ -27,6 +27,8 @@ https://github.com/dfex/route-smash
  	- sudo ip address add X.X.X.X/XX dev ens3  
  	- sudo ip link set dev ens3 up
 	```
+	<img width="886" alt="Screen Shot 2022-03-17 at 14 44 59" src="https://user-images.githubusercontent.com/49030026/158878934-90ad53d5-a075-432f-bc4d-107df5250a04.png">
+
 
 5.  Execute these commands to update Ubuntu, install PIP, install ExaBGP, and download a copy of the route-smash script.
 
@@ -61,4 +63,4 @@ https://github.com/dfex/route-smash
 9.  To start ExaBGP
  	```
  	sudo exabgp exabgp.conf 
-  ```
+  	```
