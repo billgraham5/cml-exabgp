@@ -13,15 +13,21 @@ https://github.com/dfex/route-smash
 
 1.  Choose an Ubuntu type node in the CML UI and add it to your lab topology.
 
-2.  Adjust the interface count to meet your requirements before starting the node.  The first interface should be used for management and the subsequent interfaces for BGP peering.  This cannot be changed later without wiping the configuration.
+2.  Adjust the interface count to meet your requirements before starting the node.  The first interface should be used for management and the subsequent interfaces for BGP peering.  This cannot be changed later without wiping the node configuration.
 
-3.  Adjust the RAM before starting the node.  This cannot be changed later without wiping the configuration.  Sizing guidelines are TBD.
+3.  Adjust the RAM before starting the node.  This cannot be changed later without wiping the node configuration.  Sizing guidelines are TBD.  32GB is estimated to support a full internet routing table.
 
 4.  Configure the IP addresses for the interfaces before starting the node using the CML "Edit Config" tab for the node.  This cannot be changed later without wiping the configuration.  
-		A) This contains cloud-init configuration.  Adjust the runcmd: section as needed.  
-		B) ens2 will deafult to DHCP client for management and is the first interface.  
-		C) ens3 is the first interface intended for use by BGP and likely connected to another router node in CML.  
-		D) Choose "save" before moving on.
+
+	* This example contains cloud-init configuration that should be used in the CML ExaBGP node "edit config" tab.  Adjust the runcmd: section as needed.  
+		
+	* ens2 will default to a DHCP client configuration for management and is the first interface.  It is expected that ens2 have a link to a CML external connector in NAT or bridge mode with outbound internet access to retreive packages.
+		
+	* ens3 is the first interface intended for use by BGP and is intended to connect to another router node in CML.  
+		
+	* Configure additional interfaes, if necessary
+		
+	* Choose "save" before moving on.
 	```
 	runcmd:
  	- sudo ip address add X.X.X.X/XX dev ens3  
@@ -29,8 +35,9 @@ https://github.com/dfex/route-smash
 	```
 	<img width="886" alt="Screen Shot 2022-03-17 at 14 44 59" src="https://user-images.githubusercontent.com/49030026/158878934-90ad53d5-a075-432f-bc4d-107df5250a04.png">
 
+	Note:  In CML 2.2, the interface names listed in the CML WebUI do not correctly align with the names in the operating system.  Ignore the CML WebUI names.
 
-5.  Execute these commands to update Ubuntu, install PIP, install ExaBGP, and download a copy of the route-smash script.
+5.  Execute these commands to update Ubuntu, install the Python package manager (PIP), install ExaBGP, and download a copy of the route-smash script from Github.
 
 	```
  	sudo apt update -y
@@ -45,9 +52,9 @@ https://github.com/dfex/route-smash
  	```
  	git clone https://github/w4rfc/cml-exabgp/exabgp.conf
  	```
- 	Note:  Carefully coordinate the next-hop defined in smash-route.py and the IP addressing used in exabgp.conf so that routes not hidden by downstream devices under test.
+ 	Note:  Carefully coordinate the next-hop defined in smash-route.py and the IP addressing used in exabgp.conf so that routes not hidden by downstream devices under test due to an invalid next-hop.
  
-7.  Generate the exabgp enviornment configuration file and copy the output to /usr/local/etc/exabgp/exabgp.env.
+7.  Generate the exabgp environment configuration file and copy the output to /usr/local/etc/exabgp/exabgp.env.
   
 	```
  	exabgp --fi
