@@ -51,6 +51,8 @@ https://github.com/dfex/route-smash
   
 	```
  	exabgp --fi
+	```
+	```
  	sudo nano /usr/local/etc/exabgp/exabgp.env
  	```
 	
