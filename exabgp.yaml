@@ -87,9 +87,6 @@ ui:
   label_prefix: exabgp-
   visible: true
   description: |-
-    Ubuntu Cloud Init Platform
-
-    2 GB DRAM, 1 vCPU (can be adjusted)
 
     ##### Configuration
 
