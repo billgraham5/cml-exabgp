@@ -1,0 +1,435 @@
+lab:
+  description: ''
+  notes: ''
+  timestamp: 1647367155.9509666
+  title: AS3356 / AS 701 Example
+  version: 0.0.4
+nodes:
+  - id: n0
+    label: mgmt
+    node_definition: external_connector
+    x: -400
+    y: -500
+    configuration: bridge0
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: port
+        type: physical
+  - id: n4
+    label: as3356
+    node_definition: iosxrv
+    x: -1000
+    y: -500
+    configuration: |2-
+
+      Fri Mar 18 12:38:23.777 UTC
+      Building configuration...
+      !! IOS XR Configuration 6.3.1
+      !! Last configuration change at Fri Mar 18 12:38:21 2022 by cisco
+      !
+      hostname as3356
+      logging console disable
+      line console
+       exec-timeout 0 0
+       absolute-timeout 0
+       session-timeout 0
+      !
+      line default
+       exec-timeout 0 0
+       absolute-timeout 0
+       session-timeout 0
+      !
+      interface Loopback0
+      !
+      interface MgmtEth0/0/CPU0/0
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/0
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/1
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/2
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/3
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/4
+       shutdown
+      !
+      interface GigabitEthernet0/0/0/5
+       ipv4 address 192.168.99.2 255.255.255.0
+      !
+      interface GigabitEthernet0/0/0/6
+       shutdown
+      !
+      route-policy allow_all
+        pass
+      end-policy
+      !
+      router static
+       address-family ipv4 unicast
+        10.0.0.31/32 Null0
+        10.0.0.31/32 192.168.100.1
+       !
+      !
+      router bgp 3356
+       bgp router-id 192.168.99.2
+       address-family ipv4 unicast
+       !
+       neighbor 192.168.99.1
+        remote-as 9999
+        address-family ipv4 unicast
+         route-policy allow_all in
+        !
+       !
+      !
+      end
+    image_definition: iosxrv-6-3-1
+    tags: []
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        slot: 0
+        label: MgmtEth0/0/CPU0/0
+        type: physical
+      - id: i2
+        slot: 1
+        label: GigabitEthernet0/0/0/0
+        type: physical
+      - id: i3
+        slot: 2
+        label: GigabitEthernet0/0/0/1
+        type: physical
+      - id: i4
+        slot: 3
+        label: GigabitEthernet0/0/0/2
+        type: physical
+      - id: i5
+        slot: 4
+        label: GigabitEthernet0/0/0/3
+        type: physical
+      - id: i6
+        slot: 5
+        label: GigabitEthernet0/0/0/4
+        type: physical
+      - id: i7
+        slot: 6
+        label: GigabitEthernet0/0/0/5
+        type: physical
+      - id: i8
+        slot: 7
+        label: GigabitEthernet0/0/0/6
+        type: physical
+  - id: n1
+    label: exabgp-as9999
+    node_definition: exabgp
+    x: -550
+    y: -450
+    configuration: |-
+      #cloud-config
+      hostname: inserthostname_here
+      manage_etc_hosts: True
+      system_info:
+        default_user:
+          name: cisco
+      password: cisco
+      chpasswd: { expire: False }
+      ssh_pwauth: True
+      ssh_authorized_keys:
+         - your-ssh-pubkey-line-goes-here
+      runcmd:
+       - sudo ip address add 192.168.99.1/24 dev ens3
+       - sudo ip link set dev ens3 up
+    image_definition: exabgp
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: ens3
+        type: physical
+      - id: i1
+        slot: 1
+        label: ens4
+        type: physical
+      - id: i2
+        slot: 2
+        label: ens5
+        type: physical
+      - id: i3
+        slot: 3
+        label: ens6
+        type: physical
+      - id: i4
+        slot: 4
+        label: ens7
+        type: physical
+  - id: n2
+    label: as701
+    node_definition: iosxrv9000
+    x: -1000
+    y: -400
+    configuration: |2-
+
+      Fri Mar 18 12:36:48.731 UTC
+
+      Building configuration...
+
+      !! IOS XR Configuration 7.2.2
+
+      !! Last configuration change at Fri Mar 18 12:36:45 2022 by cisco
+
+      !
+
+      hostname as701
+
+      logging console disable
+
+      username cisco
+
+       group root-lr
+
+       group cisco-support
+
+       password 7 030752180500
+
+      !
+
+      username admin
+
+       group root-lr
+
+       group cisco-support
+
+       password 7 104F0D140C19
+
+      !
+
+      username lab
+
+       group root-lr
+
+       group cisco-support
+
+       password 7 0703204E
+
+      !
+
+      line console
+
+       exec-timeout 0 0
+
+       absolute-timeout 0
+
+       session-timeout 0
+
+      !
+
+      line default
+
+       exec-timeout 0 0
+
+       absolute-timeout 0
+
+       session-timeout 0
+
+      !
+
+      call-home
+
+       service active
+
+       contact smart-licensing
+
+       profile CiscoTAC-1
+
+        active
+
+        destination transport-method http
+
+       !
+
+      !
+
+      interface MgmtEth0/RP0/CPU0/0
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/0
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/1
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/2
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/3
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/4
+
+       shutdown
+
+      !
+
+      interface GigabitEthernet0/0/0/5
+
+       ipv4 address 192.168.99.3 255.255.255.0
+
+      !
+
+      route-policy allow_all
+
+        pass
+
+      end-policy
+
+      !
+
+      router bgp 701
+
+       bgp router-id 192.168.99.3
+
+       address-family ipv4 unicast
+
+       !
+
+       neighbor 192.168.99.1
+
+        remote-as 9999
+
+        address-family ipv4 unicast
+
+         route-policy allow_all in
+
+        !
+
+       !
+
+      !
+
+      end
+    image_definition: iosxrv9000-7-2-2
+    tags: []
+    interfaces:
+      - id: i0
+        label: Loopback0
+        type: loopback
+      - id: i1
+        slot: 0
+        label: MgmtEth0/RP0/CPU0/0
+        type: physical
+      - id: i2
+        slot: 1
+        label: donotuse1
+        type: physical
+      - id: i3
+        slot: 2
+        label: donotuse2
+        type: physical
+      - id: i4
+        slot: 3
+        label: GigabitEthernet0/0/0/0
+        type: physical
+      - id: i5
+        slot: 4
+        label: GigabitEthernet0/0/0/1
+        type: physical
+      - id: i6
+        slot: 5
+        label: GigabitEthernet0/0/0/2
+        type: physical
+      - id: i7
+        slot: 6
+        label: GigabitEthernet0/0/0/3
+        type: physical
+      - id: i8
+        slot: 7
+        label: GigabitEthernet0/0/0/4
+        type: physical
+      - id: i9
+        slot: 8
+        label: GigabitEthernet0/0/0/5
+        type: physical
+  - id: n3
+    label: switch
+    node_definition: unmanaged_switch
+    x: -750
+    y: -500
+    configuration: ''
+    tags: []
+    interfaces:
+      - id: i0
+        slot: 0
+        label: port0
+        type: physical
+      - id: i1
+        slot: 1
+        label: port1
+        type: physical
+      - id: i2
+        slot: 2
+        label: port2
+        type: physical
+      - id: i3
+        slot: 3
+        label: port3
+        type: physical
+      - id: i4
+        slot: 4
+        label: port4
+        type: physical
+      - id: i5
+        slot: 5
+        label: port5
+        type: physical
+      - id: i6
+        slot: 6
+        label: port6
+        type: physical
+      - id: i7
+        slot: 7
+        label: port7
+        type: physical
+links:
+  - id: l0
+    i1: i0
+    n1: n1
+    i2: i0
+    n2: n0
+  - id: l1
+    i1: i0
+    n1: n3
+    i2: i7
+    n2: n4
+  - id: l2
+    i1: i1
+    n1: n3
+    i2: i9
+    n2: n2
+  - id: l3
+    i1: i1
+    n1: n1
+    i2: i2
+    n2: n3
