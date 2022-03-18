@@ -1,0 +1,107 @@
+id: exabgp
+sim:
+  linux_native:
+    driver: server
+    libvirt_domain_driver: kvm
+    disk_driver: virtio
+    nic_driver: virtio
+    ram: 32768
+    cpus: 1
+    data_volume: 64
+    boot_disk_size: 64
+    cpu_limit: 100
+inherited:
+  image:
+    ram: true
+    cpus: true
+    cpu_limit: true
+    data_volume: true
+    boot_disk_size: true
+  node:
+    ram: true
+    cpus: true
+    cpu_limit: true
+    data_volume: true
+    boot_disk_size: true
+general:
+  nature: server
+  description: ExaBGP
+  read_only: false
+schema_version: 0.0.1
+configuration:
+  generator:
+    driver: ubuntu
+  provisioning:
+    volume_name: cidata
+    media_type: iso
+    files:
+      - name: meta-data
+        content: |-
+          instance-id: exabgp
+          local-hostname: exabgp
+        editable: false
+      - name: user-data
+        content: |-
+          #cloud-config
+          hostname: inserthostname_here
+          manage_etc_hosts: True
+          system_info:
+            default_user:
+              name: cisco
+          password: cisco
+          chpasswd: { expire: False }
+          ssh_pwauth: True
+          ssh_authorized_keys:
+             - your-ssh-pubkey-line-goes-here
+          runcmd:
+           - sudo ip address add 192.168.100.1/24 dev ens3
+           - sudo ip link set dev ens3 up
+        editable: true
+device:
+  interfaces:
+    physical:
+      - ens3
+      - ens4
+      - ens5
+      - ens6
+      - ens7
+      - ens8
+      - ens9
+      - ens10
+    has_loopback_zero: false
+    default_count: 1
+    serial_ports: 1
+boot:
+  timeout: 180
+  completed:
+    - Cloud-init target
+    - Welcome to Ubuntu
+    - running 'modules:final' at
+pyats:
+  os: linux
+  use_in_testbed: true
+ui:
+  group: Others
+  icon: cloud
+  label: ExaBGP
+  label_prefix: exabgp-
+  visible: true
+  description: |-
+    Ubuntu Cloud Init Platform
+
+    2 GB DRAM, 1 vCPU (can be adjusted)
+
+    ##### Configuration
+
+    This Ubuntu image uses cloud-init YAML for configuration. Please
+    ensure to have a valid cloud-init. The pre-configured username
+    is 'ubuntu'. Use either the provided password or provide an
+    SSH key. The node comes with a very brief (but complete)
+    cloud-init example when you drop one onto the canvas.
+
+    The node has also a 32GB data disk which can be used e.g. to
+    extend the root VG for additional space. It's not initialized at
+    boot (has to be managed by user).
+
+    See [here](https://cloudinit.readthedocs.io/en/latest/topics/examples.html)
+    for additional cloud-init examples.
