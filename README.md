@@ -1,6 +1,6 @@
 # cml-exabgp
 
-This repo contains the configuration to run ExaBGP and the route generation script (Smash Route)in Cisco Modeling Labs 2.x.
+This repo contains the configuration to run ExaBGP and the route generation script (Smash Route) in Cisco Modeling Labs 2.x.
 
 ```
 https://github.com/Exa-Networks/exabgp
